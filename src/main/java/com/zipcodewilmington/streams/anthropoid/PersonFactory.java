@@ -3,6 +3,7 @@ package com.zipcodewilmington.streams.anthropoid;
 import com.zipcodewilmington.streams.tools.RandomUtils;
 import com.zipcodewilmington.streams.tools.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ public final class PersonFactory {
      */
     public Person createRandomPerson() {
         String name = StringUtils.capitalizeFirstChar(RandomUtils.createString('a', 'e', 3));
+        //name += name.charAt(0);
         String[] aliases = RandomUtils.createStrings('a', 'z', 3, 5);
         boolean isMale = RandomUtils.createBoolean(50);
         long personalId = System.nanoTime();
@@ -39,7 +41,9 @@ public final class PersonFactory {
      * @return - ArrayList of Person objects
      */ // TODO
     public List<Person> createPersonList(int listSize) {
-        return null;
+        return  Stream.generate(this::createRandomPerson)
+                .limit(listSize).collect(Collectors.toList());
+
     }
 
 
@@ -48,7 +52,10 @@ public final class PersonFactory {
      * @return - Array of Person objects
      */ // TODO
     public Person[] createPersonArray(int arrayLength) {
-        return null;
+
+        return Stream.generate(this::createRandomPerson)
+                .limit(arrayLength)
+                .toArray(Person[]::new);
     }
 
 
@@ -59,6 +66,8 @@ public final class PersonFactory {
      * @return - Stream representation of collection of Person objects
      */ // TODO
     public Stream<Person> createPersonStream(int streamCount) {
-        return null;
+
+        return Stream.generate(this::createRandomPerson)
+                .limit(streamCount);
     }
 }
